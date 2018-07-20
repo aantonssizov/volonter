@@ -1,3 +1,51 @@
+<?php
+
+require "connect.php";
+
+$name = $surname = $email = $password = '';
+$errors = array();
+
+if( isset($_POST['name']) && isset($_POST['surname']) && $_POST['email'] && isset($_POST['password']) && isset($_POST['password1']) )
+{
+  $name = test_input($_POST['name']);
+  $surname = test_input($_POST['surname']);
+  $email = test_input($_POST['email']);
+
+  if( $_POST['password1'] != $_POST['password'] ) {
+    $errors[] = "Your password is not equal password, Please, reapete password!";
+  } else {
+    $password = test_input($_POST['password']);
+  }
+
+  if( R::count('user', 'email = ?', array($email)) )
+  {
+    $errors[] = 'This email was register';
+  }
+
+}
+
+function test_input($data)
+{
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
+if ( empty($errors) )
+{
+  $user = R::dispense('user');
+  $user->name         = $name;
+  $user->surname      = $surname;
+  $user->email        = $email;
+  $user->password     = password_hash($password, PASSWORD_BCRYPT);
+
+  R::store($user);
+
+  setcookie('user', $user);
+}
+
+?>
 <!DOCTYPE html>
 <html> 
   <head> 
@@ -13,22 +61,24 @@
       <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
       <div class="navbar-collapse collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="navbar-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="navbar-item"><a class="nav-link" href="projects.html">Projects</a></li>
+          <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
+          <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
         </ul>
       </div>
     </nav>
     <div class="container w-25 my-5 flex-grow">
-      <form>
+      <form method="POST">
         <div class="form-group">
           <h2>Sign up for start </h2>
-          <input class="form-control my-1" type="text" placeholder="Name" required>
-          <input class="form-control my-1" type="text" placeholder="Surname">
-          <input class="form-control my-1" type="email" placeholder="Email" required>
-          <input class="form-control my-1" type="password" placeholder="Password" required>
-          <input class="form-control my-1" type="password" placeholder="Reapete password" required>
+          <?php if(isset($_COOKIE['user'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
+          <?php if(!empty($errors)) { ?> <div class="alert alert-danger" role="alert"> <?php echo array_shift($errors);?></div><?php }?>
+          <input class="form-control my-1" type="text" placeholder="Name" name="name" value="<?php if(!empty($errors)) {echo $name;} ?>" required>
+          <input class="form-control my-1" type="text" placeholder="Surname" name="surname"value="<?php if(!empty($errors)) {echo $surname;} ?>" >
+          <input class="form-control my-1" type="email" placeholder="Email" name="email" value="<?php if(!empty($errors)) {echo $email;} ?>" required>
+          <input class="form-control my-1" type="password" placeholder="Password" name="password" required>
+          <input class="form-control my-1" type="password" placeholder="Reapete password" name="password1" required>
           <button class="btn btn-primary btn-lg btn-block" type="submit">Sign up  </button>
-          <p class="text-info my-1">If you have account:    </p><a class="btn btn-primary btn-lg btn-block" role="button" href="#">Sign in</a>
+          <p class="text-info my-1">If you have account: </p><a class="btn btn-primary btn-lg btn-block" role="button" href="signIn.php">Sign in</a>
         </div>
       </form>
     </div>

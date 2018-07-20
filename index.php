@@ -1,3 +1,6 @@
+<?php
+require 'connect.php';
+?>
 <!DOCTYPE html>
 <html> 
   <head>
@@ -18,7 +21,7 @@
           <li class="navbar-item"><a class="nav-link" href="#how">How</a></li>
           <li class="navbar-item"><a class="nav-link" href="#projects">Projects</a></li>
           <li class="navbar-item"><a class="nav-link" href="#signUp">Sign up</a></li>
-          <li class="navbar-item"><a class="nav-link" href="signIn.html">Sign in</a></li>
+          <li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li>
         </ul>
       </div>
     </nav>
@@ -70,16 +73,16 @@
           <div class="col">
             <h3 class="p-1">For people who need help.</h3>
             <ol>
-              <li>Sign up or sign in.</li>
-              <li>Create project.</li>
+              <li><a class="text-light" href="signUp.php">Sign up</a> or <a class="text-light" href="signIn.php">sign in</a>.</li>
+              <li><a class="text-light" href="createProject.php">Create project</a>.</li>
               <li>And wait helpers.</li>
             </ol>
           </div>
           <div class="col">
             <h3 class="p-1">For helpers.</h3>
             <ol>
-              <li>Sign up or sign in.</li>
-              <li>Find project.</li>
+              <li><a class="text-light" href="signUp.php">Sign up</a> or <a class="text-light" href="signIn.php">sign in</a>.</li>
+              <li><a class="text-light" href="projects.php">Find project</a>.</li>
               <li>And help people.</li>
             </ol>
           </div>
@@ -117,16 +120,16 @@
     </div>
     <hr class="container" style="border: 0; border-top: 2px solid grey">
     <div class="container w-25 flex-grow" id="signUp">
-      <form>
+      <form action="signUp.php" method="POST">
         <div class="form-group">
           <h2>Sign up for start </h2>
-          <input class="form-control my-1" type="text" placeholder="Name" required>
-          <input class="form-control my-1" type="text" placeholder="Surname">
-          <input class="form-control my-1" type="email" placeholder="Email" required>
-          <input class="form-control my-1" type="password" placeholder="Password" required>
-          <input class="form-control my-1" type="password" placeholder="Reapete password" required>
+          <input class="form-control my-1" type="text" placeholder="Name" name="name" required>
+          <input class="form-control my-1" type="text" placeholder="Surname" name="surname">
+          <input class="form-control my-1" type="email" placeholder="Email" name="email" required>
+          <input class="form-control my-1" type="password" placeholder="Password" name="password" required>
+          <input class="form-control my-1" type="password" placeholder="Reapete password" name="password1" required>
           <button class="btn btn-primary btn-lg btn-block" type="submit">Sign up  </button>
-          <p class="text-info my-1">If you have account:    </p><a class="btn btn-primary btn-lg btn-block" role="button" href="signIn.html">Sign in</a>
+          <p class="text-info my-1">If you have account: </p><a class="btn btn-primary btn-lg btn-block" role="button" href="signIn.php">Sign in</a>
         </div>
       </form>
     </div>
