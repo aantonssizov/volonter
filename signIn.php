@@ -9,7 +9,7 @@ if( isset($_POST['email']) && isset($_POST['password']) )
   $user = R::findOne('user', 'email = ?', array($_POST['email']));
   if( $user ) {
     if ( password_verify($_POST['password'], $user->password) ) {
-      setcookie('user', $user);
+      setcookie('user', serialize(R::load('user', $user->id)), time()+3600);
     } else {
       $errors[] = "Wrong password";
     }

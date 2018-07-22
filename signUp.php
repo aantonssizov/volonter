@@ -40,9 +40,9 @@ if ( empty($errors) )
   $user->email        = $email;
   $user->password     = password_hash($password, PASSWORD_BCRYPT);
 
-  R::store($user);
+  $id = R::store($user);
 
-  setcookie('user', $user);
+  setcookie('user', serialize(R::load('user', $id)), time()+3600);
 }
 
 ?>
