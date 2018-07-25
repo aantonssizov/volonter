@@ -32,7 +32,7 @@ function test_input($data)
   return $data;
 }
 
-if ( empty($errors) )
+if ( empty($errors) && isset($_POST['submit']) )
 {
   $user = R::dispense('user');
   $user->name         = $name;
@@ -42,7 +42,7 @@ if ( empty($errors) )
 
   $id = R::store($user);
 
-  setcookie('user', serialize(R::load('user', $id)), time()+3600);
+  setcookie('user', serialize(R::load('user', $id)), time()+3600, '/');
 }
 
 ?>
@@ -70,15 +70,15 @@ if ( empty($errors) )
       <form method="POST">
         <div class="form-group">
           <h2>Sign up for start </h2>
-          <?php if(isset($_COOKIE['user'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
+          <?php if(isset($_COOKIE['user']) && isset($_POST['submit'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
           <?php if(!empty($errors)) { ?> <div class="alert alert-danger" role="alert"> <?php echo array_shift($errors);?></div><?php }?>
           <input class="form-control my-1" type="text" placeholder="Name" name="name" value="<?php if(!empty($errors)) {echo $name;} ?>" required>
           <input class="form-control my-1" type="text" placeholder="Surname" name="surname"value="<?php if(!empty($errors)) {echo $surname;} ?>" >
           <input class="form-control my-1" type="email" placeholder="Email" name="email" value="<?php if(!empty($errors)) {echo $email;} ?>" required>
           <input class="form-control my-1" type="password" placeholder="Password" name="password" required>
           <input class="form-control my-1" type="password" placeholder="Reapete password" name="password1" required>
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Sign up  </button>
-          <p class="text-info my-1">If you have account: </p><a class="btn btn-primary btn-lg btn-block" role="button" href="signIn.php">Sign in</a>
+          <button class="btn btn-success btn-lg btn-block" type="submit" name="submit">Sign up  </button>
+          <p class="text-info my-1">If you have account: </p><a class="btn btn-success btn-lg btn-block" role="button" href="signIn.php">Sign in</a>
         </div>
       </form>
     </div>

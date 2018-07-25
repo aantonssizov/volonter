@@ -2,9 +2,10 @@
 
 require "connect.php";
 
-$user = ( isset($_COOKIE['user']) ) ? $_COOKIE['user'] : NULL;
 $alert = '';
-$user = unserialize($_COOKIE['user']);
+$user = ( isset($_COOKIE['user']) ) ? 
+  unserialize($_COOKIE['user']) :
+  null;
 
 if( isset($_POST['submit']) )
 {
@@ -19,7 +20,8 @@ if( isset($_POST['submit']) )
   $date        = date('Y-m-d');
 
   //images
-  $folder   = '/opt/lampp/htdocs/volonter_images/';
+  $folder   = '../volonter_images/';
+  // $upl_f    = '/opt/lampp/htdocs/volonter_images';
   $logo_img = $_FILES['logo_img']['name'];
   $img      = array(
     $_FILES['img1']['name'],
@@ -39,11 +41,14 @@ if( isset($_POST['submit']) )
   rename($folder.$logo_img, $folder.$new_name);
   $logo_img = $new_name;
 
+  sleep(1);
   for( $i = 0; $i < 3; $i++ )
   {
     $new_name = "img_".date("YmdHis").".jpg";
     rename($folder.$img[$i], $folder.$new_name);
     $img[$i] = $new_name;
+
+    sleep(1);
   }
 
   // upload project
@@ -63,7 +68,7 @@ if( isset($_POST['submit']) )
   $logo = R::dispense('images');
   $logo->name    = $logo_img;
   $logo->path    = $folder;
-  $logo->project = $project;
+  
   
   //upload other images
 
@@ -72,24 +77,22 @@ if( isset($_POST['submit']) )
   $uimgs[0] = R::dispense('images');
   $uimgs[0]->name = $img[0];
   $uimgs[0]->path = $folder;
-  $uimgs[0]->project = $project;
 
   $uimgs[1] = R::dispense('images');
   $uimgs[1]->name = $img[1];
   $uimgs[1]->path = $folder;
-  $uimgs[1]->project = $project;
  
   $uimgs[2] = R::dispense('images');
   $uimgs[2]->name = $img[2];
   $uimgs[2]->path = $folder;
-  $uimgs[2]->project = $project;
 
-  R::store($logo);
+  $project->ownImagesList[] = $logo;
   for( $i = 0; $i < count($uimgs); $i++ )
   {
-    R::store($uimgs[$i]);
+    $project->ownImagesList[] = $uimgs[$i];
   }
 
+  R::store( $project );
   $alert = "success";
 }
 
@@ -182,7 +185,7 @@ function test_input($data)
       </div>
     </form>
     <?php } else { ?>
-      <div class="alert alert-danger" role="alert">You should be <a href="signup.php">signed in</a></div>
+      <div class="alert alert-danger" role="alert">You should be <a href="signUp.php">signed in</a></div>
     <?php }?>
     <footer class="footer bg-success p-3" style="position:fixed;bottom:0;width:100%;">
       <div class="container"><span class="text-light">2017 &copy; Anton Sizov, Vitalina Sizova and Rostislav Sizov.</span></div>

@@ -1,3 +1,10 @@
+<?php
+
+require "connect.php";
+
+$projects = R::findAll('projects', 'ORDER BY title LIMIT 30');
+$ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
+?>
 <!DOCTYPE html>
 <html> 
   <head> 
@@ -8,27 +15,40 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <title>Projects -- Volonter.ua</title>
   </head>
-  <body> 
+  <body class="d-flex flex-column"> 
     <nav class="navbar navbar-expand-lg navbar-dark bg-success navbar-sticky"><a class="navbar-brand" href="#">Volonter</a>
       <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
       <div class="navbar-collapse collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="navbar-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="navbar-item"><a class="nav-link active" href="projects.html">Projects</a></li>
+          <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
+          <li class="navbar-item"><a class="nav-link active" href="projects.php">Projects</a></li>
         </ul>
       </div>
     </nav>
-    <div id="projects">
-      <form>
-        <div class="container">
-          <select class="form-control">
-            <option disabled>Addres</option>
-            <option>Minsk, Belarus</option>
-            <option>Moscow, Russia</option>
-            <option>Kiev, Ukraine</option>
-          </select>
+    <div id="projects" class="flex-grow">
+      <div class="container-fluid">
+        <div class="row">
+        <?php 
+          for( $i = 0; $i < count($ids); $i++ )
+          {
+            $img_ids  = R::getAll('SELECT (id) FROM images WHERE projects_id = ?', array($projects[$ids[$i]['id']]['id']));
+            echo '<div class="col-4">';
+            echo '<div class="card">
+                    <img src=' . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['path'] . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['name'] . ' alt="" class="card-image-top" style="max-height: 200px;">
+                    <div class="card-header">' . $projects[$ids[$i]['id']]['title'] . '</div>
+                    <div class="card-body">
+                      <h5 class="card-title">' . $projects[$ids[$i]['id']]['title'] . '</h5>
+                      <p>' . $projects[$ids[$i]['id']]['description'] . '</p>
+                      <p>Address: ' . $projects[$ids[$i]['id']]['address'] . '</p>
+                      <p>Date: ' . $projects[$ids[$i]['id']]['date'] . '</p>
+                      <p>Status: ' . $projects[$ids[$i]['id']]['status'] . '</p>
+                      <a href=" project.php?project_id=' . $projects[$ids[$i]['id']]['id'] . '" class="card-link"></a>
+                    </div>
+                  </div>';
+            echo '</div>';
+          }?>
         </div>
-      </form>
+      </div>
     </div>
     <footer class="footer bg-success p-3">
       <div class="container"><span class="text-light">2017 &copy; Anton Sizov, Vitalina Sizova and Rostislav Sizov.</span></div>

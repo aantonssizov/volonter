@@ -9,7 +9,7 @@ if( isset($_POST['email']) && isset($_POST['password']) )
   $user = R::findOne('user', 'email = ?', array($_POST['email']));
   if( $user ) {
     if ( password_verify($_POST['password'], $user->password) ) {
-      setcookie('user', serialize(R::load('user', $user->id)), time()+3600);
+      setcookie('user', serialize(R::load('user', $user->id)), time()+3600, '/');
     } else {
       $errors[] = "Wrong password";
     }
@@ -29,7 +29,7 @@ if( isset($_POST['email']) && isset($_POST['password']) )
     <link rel="stylesheet" href="assets/css/main.css">
     <title>Sign in -- Volonter.ua</title>
   </head>
-  <body class="d-flex flex-column">
+  <body class="d-flex flex-column justify-content-between">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success navbar-sticky"><a class="navbar-brand" href="#">Volonter</a>
       <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
       <div class="navbar-collapse collapse" id="navbarNav">
@@ -39,16 +39,16 @@ if( isset($_POST['email']) && isset($_POST['password']) )
         </ul>
       </div>
     </nav>
-    <div class="container w-25 my-5 flex-grow">
+    <div class="container w-25 my-5">
       <form method="POST">
         <div class="form-group">
           <h2>Sign in for start </h2>
-          <?php if(isset($_COOKIE['user'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
+          <?php if(isset($_COOKIE['user']) && isset($_POST['submit'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
           <?php if(!empty($errors)) { ?> <div class="alert alert-danger" role="alert"> <?php echo array_shift($errors);?></div><?php }?>
           <input class="form-control my-1" type="email" placeholder="Email" name="email" required>
           <input class="form-control my-1" type="password" placeholder="Password" name="password" required>
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Sign in  </button>
-          <p class="text-info my-1">If you don't have account:    </p><a class="btn btn-primary btn-lg btn-block" role="button" href="signUp.php">Sign up</a>
+          <button class="btn btn-success btn-lg btn-block" type="submit" name="submit">Sign in  </button>
+          <p class="text-info my-1">If you don't have account: </p><a class="btn btn-success btn-lg btn-block" role="button" href="signUp.php">Sign up</a>
         </div>
       </form>
     </div>
