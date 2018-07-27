@@ -22,6 +22,8 @@ $ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
         <ul class="navbar-nav">
           <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
           <li class="navbar-item"><a class="nav-link active" href="projects.php">Projects</a></li>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
@@ -42,7 +44,7 @@ $ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
                       <p>Address: ' . $projects[$ids[$i]['id']]['address'] . '</p>
                       <p>Date: ' . $projects[$ids[$i]['id']]['date'] . '</p>
                       <p>Status: ' . $projects[$ids[$i]['id']]['status'] . '</p>
-                      <a href=" project.php?project_id=' . $projects[$ids[$i]['id']]['id'] . '" class="card-link"></a>
+                      <a href=" project.php?project_id=' . $projects[$ids[$i]['id']]['id'] . '" class="card-link">To project.</a>
                     </div>
                   </div>';
             echo '</div>';

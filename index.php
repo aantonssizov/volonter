@@ -25,15 +25,17 @@ require 'connect.php';
           <li class="navbar-item"><a class="nav-link" href="#projects">Projects</a></li>
           <li class="navbar-item"><a class="nav-link" href="#signUp">Sign up</a></li>
           <li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
     <header class="header container-fluid d-flex flex-column justify-content-end align-items-end">
       <h2 class="p-2 text-light">We help people with Volonter</h2>
       <p class="p-2 col-lg-4 text-white text-lg-right text-sm-right">Volonter.ua is web service for people which need help and helpers.</p>
-    </header
+    </header>
     <div class="container my-5" id="benefits">
-      <h2 class="p-2 text-center">Why do you should to use it</h2>
+      <h2 class="p-5 text-center">Why do you should to use it</h2>
       <div class="d-flex justify-content-between flex-wrap mt-3">
         <div class="ben col-lg-6 col-12">
           <div class="row"><img class="ben-img col-2" src="assets/img/circle.svg" alt="">
@@ -101,33 +103,38 @@ require 'connect.php';
         </div>
       </div>
     </div>
-    <div class="container-fluid my-5 d-lg-flex justify-content-between" id="projects">
-      <div class="card col mx-2 p-0">
-        <div class="card-header">Please, Help dog</div>
-        <div class="card-body">
-          <h5 class="card-title">Please, Help dog.</h5>
-          <p>Description: Dog needs money for operation</p>
-          <p>Status: ACTIVE</p>
-          <p>date: 2018-07-09</p>
+    <div class="container-fluid my-5 d-flex flex-column" id="projects">
+      <div class="row d-lg-flex justify-content-between">
+        <div class="card col-3 p-0">
+          <div class="card-header">Please, Help dog</div>
+          <div class="card-body">
+            <h5 class="card-title">Please, Help dog.</h5>
+            <p>Description: Dog needs money for operation</p>
+            <p>Status: ACTIVE</p>
+            <p>date: 2018-07-09</p>
+          </div>
+        </div>
+        <div class="card col-3 p-0">
+          <div class="card-header">Please, Help dog</div>
+          <div class="card-body">
+            <h5 class="card-title">Please, Help dog.</h5>
+            <p>Description: Dog needs money for operation</p>
+            <p>Status: ACTIVE</p>
+            <p>date: 2018-07-09</p>
+          </div>
+        </div>
+        <div class="card col-3 p-0">
+          <div class="card-header">Please, Help dog</div>
+          <div class="card-body">
+            <h5 class="card-title">Please, Help dog.</h5>
+            <p>Description: Dog needs money for operation</p>
+            <p>Status: ACTIVE</p>
+            <p>date: 2018-07-09</p>
+          </div>
         </div>
       </div>
-      <div class="card col mx-2 p-0">
-        <div class="card-header">Please, Help dog</div>
-        <div class="card-body">
-          <h5 class="card-title">Please, Help dog.</h5>
-          <p>Description: Dog needs money for operation</p>
-          <p>Status: ACTIVE</p>
-          <p>date: 2018-07-09</p>
-        </div>
-      </div>
-      <div class="card col mx-2 p-0">
-        <div class="card-header">Please, Help dog</div>
-        <div class="card-body">
-          <h5 class="card-title">Please, Help dog.</h5>
-          <p>Description: Dog needs money for operation</p>
-          <p>Status: ACTIVE</p>
-          <p>date: 2018-07-09</p>
-        </div>
+      <div class="col p-3 text-center">
+        <a href="projects.php" role="button" class="btn btn-success btn-lg">More Projects...</a>
       </div>
     </div>
     <hr class="container-fluid" style="border: 0; border-top: 1px solid grey;width: 97%;">

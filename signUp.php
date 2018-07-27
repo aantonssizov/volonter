@@ -43,6 +43,7 @@ if ( empty($errors) && isset($_POST['submit']) )
   $id = R::store($user);
 
   setcookie('user', serialize(R::load('user', $id)), time()+3600, '/');
+  header("Location: index.php");
 }
 
 ?>
@@ -63,6 +64,8 @@ if ( empty($errors) && isset($_POST['submit']) )
         <ul class="navbar-nav">
           <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
           <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
