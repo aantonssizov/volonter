@@ -23,10 +23,10 @@ require 'connect.php';
           <li class="navbar-item"><a class="nav-link" href="#benefits">Benefits</a></li>
           <li class="navbar-item"><a class="nav-link" href="#how">How</a></li>
           <li class="navbar-item"><a class="nav-link" href="#projects">Projects</a></li>
-          <li class="navbar-item"><a class="nav-link" href="#signUp">Sign up</a></li>
-          <li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li>
-          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
-          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
+<?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="#signUp">Sign up</a></li><?php }?>
+<?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
+<?php if ( isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+<?php if ( isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
@@ -105,7 +105,7 @@ require 'connect.php';
     </div>
     <div class="container-fluid my-5 d-flex flex-column" id="projects">
       <div class="row d-lg-flex justify-content-between">
-        <div class="card col-3 p-0">
+        <div class="card col p-0 m-5">
           <div class="card-header">Please, Help dog</div>
           <div class="card-body">
             <h5 class="card-title">Please, Help dog.</h5>
@@ -114,7 +114,7 @@ require 'connect.php';
             <p>date: 2018-07-09</p>
           </div>
         </div>
-        <div class="card col-3 p-0">
+        <div class="card col p-0 m-5">
           <div class="card-header">Please, Help dog</div>
           <div class="card-body">
             <h5 class="card-title">Please, Help dog.</h5>
@@ -123,7 +123,7 @@ require 'connect.php';
             <p>date: 2018-07-09</p>
           </div>
         </div>
-        <div class="card col-3 p-0">
+        <div class="card col p-0 m-5">
           <div class="card-header">Please, Help dog</div>
           <div class="card-body">
             <h5 class="card-title">Please, Help dog.</h5>
@@ -133,11 +133,12 @@ require 'connect.php';
           </div>
         </div>
       </div>
-      <div class="col p-3 text-center">
+      <div class="p-3 text-center">
         <a href="projects.php" role="button" class="btn btn-success btn-lg">More Projects...</a>
       </div>
     </div>
     <hr class="container-fluid" style="border: 0; border-top: 1px solid grey;width: 97%;">
+    <?php if ( !isset($_COOKIE['user']) ) {?>
     <div class="container flex-grow" id="signUp">
       <div class="row d-flex justify-content-between align-items-center">
         <form action="signUp.php" method="POST" class="col">
@@ -158,6 +159,21 @@ require 'connect.php';
         </div>
       </div>
     </div>
+    <?php } else {?>
+    <div class="container flex-grow m-5">
+      <h2>Ok lets start</h2>
+      <div class="row">
+        <div class="col-lg p-2">
+          <h3>Helper</h3>
+          <a role="button" href="projects.php" class="btn btn-lg btn-block btn-outline-success">Find Projects</a>
+        </div>
+        <div class="col-lg p-2">
+          <h3>Needy</h3>
+          <a role="button" href="createProject.php" class="btn btn-lg btn-block btn-outline-success">Create Project</a>
+        </div>
+      </div>
+    </div>
+    <?php }?>
     <footer class="footer bg-success p-3">
       <div class="container"><span class="text-light">2017 &copy; Anton Sizov, Vitalina Sizova and Rostislav Sizov.</span></div>
     </footer>

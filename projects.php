@@ -22,6 +22,8 @@ $ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
         <ul class="navbar-nav">
           <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
           <li class="navbar-item"><a class="nav-link active" href="projects.php">Projects</a></li>
+          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
+          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
@@ -29,24 +31,24 @@ $ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
     </nav>
     <div id="projects" class="flex-grow">
       <div class="container-fluid">
-        <div class="row">
+        <div class="row my-5">
         <?php 
           for( $i = 0; $i < count($ids); $i++ )
           {
             $img_ids  = R::getAll('SELECT (id) FROM images WHERE projects_id = ?', array($projects[$ids[$i]['id']]['id']));
             echo '<div class="col-4">';
-            echo '<div class="card">
-                    <img src=' . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['path'] . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['name'] . ' alt="" class="card-image-top" style="max-height: 200px;">
-                    <div class="card-header">' . $projects[$ids[$i]['id']]['title'] . '</div>
-                    <div class="card-body">
-                      <h5 class="card-title">' . $projects[$ids[$i]['id']]['title'] . '</h5>
-                      <p>' . $projects[$ids[$i]['id']]['description'] . '</p>
-                      <p>Address: ' . $projects[$ids[$i]['id']]['address'] . '</p>
-                      <p>Date: ' . $projects[$ids[$i]['id']]['date'] . '</p>
-                      <p>Status: ' . $projects[$ids[$i]['id']]['status'] . '</p>
-                      <a href=" project.php?project_id=' . $projects[$ids[$i]['id']]['id'] . '" class="card-link">To project.</a>
-                    </div>
-                  </div>';
+            echo '  <div class="card">
+                      <img src=' . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['path'] . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['name'] . ' alt="" class="card-image-top" style="max-height: 200px;">
+                      <div class="card-header">' . $projects[$ids[$i]['id']]['title'] . '</div>
+                      <div class="card-body">
+                        <h5 class="card-title">' . $projects[$ids[$i]['id']]['title'] . '</h5>
+                        <p>' . $projects[$ids[$i]['id']]['description'] . '</p>
+                        <p>Address: ' . $projects[$ids[$i]['id']]['address'] . '</p>
+                        <p>Date: ' . $projects[$ids[$i]['id']]['date'] . '</p>
+                        <p>Status: ' . $projects[$ids[$i]['id']]['status'] . '</p>
+                        <a href=" project.php?project_id=' . $projects[$ids[$i]['id']]['id'] . '" class="card-link">To project.</a>
+                      </div>
+                    </div>';
             echo '</div>';
           }?>
         </div>

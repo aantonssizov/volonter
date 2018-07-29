@@ -37,6 +37,8 @@ if( isset($_POST['email']) && isset($_POST['password']) )
         <ul class="navbar-nav">
           <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
           <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
+          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
+          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>

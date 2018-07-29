@@ -121,6 +121,10 @@ function test_input($data)
         <ul class="navbar-nav">
           <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
           <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
+          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
+          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
@@ -136,8 +140,10 @@ function test_input($data)
               <input class="form-control m-1" type="text" name="description" placeholder="Description">
             </div>
             <div class="col-lg-4 col-6">
-              <label class="btn btn-outline-secondary m-1">Main image
+              <label class="btn btn-outline-secondary m-1 logo-img">
+              Main image
                 <input type="file" style="display: none;" name="logo_img">
+                <span class="image_path"></span>
               </label>
             </div>
           </div>
@@ -178,7 +184,7 @@ function test_input($data)
               </div>
             </div>
             <div class="col-lg-4 col-12">
-              <button class="btn btn-primary btn-block btn-lg m-1" type="submit" name="submit">Create project</button>
+              <button class="btn btn-success btn-block btn-lg m-1" type="submit" name="submit">Create project</button>
             </div>
           </div>
         </div>
@@ -193,5 +199,17 @@ function test_input($data)
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+    <script>
+      'use strict';
+      let logo = document.querySelector('.logo-img');
+      let put  = document.querySelector('.image_path');
+      logo.addEventListener('change', () => {
+        if (document.querySelector('.logo-img input').value) {
+          put.innerHTML = document.querySelector('.logo-img input').value; 
+        } else {
+          put.innerHTML = ''; 
+        }
+      });
+    </script>
   </body>
 </html>
