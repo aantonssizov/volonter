@@ -18,6 +18,10 @@ if( isset($_POST['submit']) )
   $address     = test_input($_POST['address']);
   $status      = 'active';
   $date        = date('Y-m-d');
+  $ext         = array(
+    '.jpg',
+    '.png'
+  );
 
   //images
   $folder   = '../volonter_images/';
@@ -29,6 +33,8 @@ if( isset($_POST['submit']) )
     $_FILES['img3']['name']
   );
 
+  $upload_ext = ( strpos($logo_img, $ext[0]) != false ) ? '.jpg' : ( strpos($logo_img, $ext[1]) != false ) ? '.png' : '.gif';
+
   // upload project
   // upload images to server
   move_uploaded_file($_FILES['logo_img']['tmp_name'], $folder.$_FILES['logo_img']['name']);
@@ -36,7 +42,7 @@ if( isset($_POST['submit']) )
     move_uploaded_file($_FILES["img$i"]['tmp_name'], $folder.$_FILES["img$i"]['name']);
   }
 
-  $new_name = "img_".date("YmdHis").".jpg";
+  $new_name = "img_".date("YmdHis").$upload_ext;
   //Переименуем файл на всякий случай что бы не было совпадений                                                  
   rename($folder.$logo_img, $folder.$new_name);
   $logo_img = $new_name;
@@ -44,6 +50,8 @@ if( isset($_POST['submit']) )
   sleep(1);
   for( $i = 0; $i < 3; $i++ )
   {
+    $upload_ext = ( strpos($img[$i], $ext[0]) ) ? '.jpg' : ( strpos($img[$i], $ext[1]) );
+
     $new_name = "img_".date("YmdHis").".jpg";
     rename($folder.$img[$i], $folder.$new_name);
     $img[$i] = $new_name;
@@ -172,14 +180,17 @@ function test_input($data)
           <div class="row"> 
             <div class="col-lg-8 col-12">
               <div class="row">
-                <label class="btn btn-outline-secondary m-1 col">Add image
+                <label class="btn btn-outline-secondary m-1 col _img_">Add image
                   <input type="file" style="display: none;" name="img1">
+                  <span class="image_path"></span>
                 </label>
-                <label class="btn btn-outline-secondary m-1 col">Add image
+                <label class="btn btn-outline-secondary m-1 col _img_">Add image
                   <input type="file" style="display: none;" name="img2">
+                  <span class="image_path"></span>
                 </label>
-                <label class="btn btn-outline-secondary m-1 col">Add image
+                <label class="btn btn-outline-secondary m-1 col _img_">Add image
                   <input type="file" style="display: none;" name="img3">
+                  <span class="image_path"></span>
                 </label>
               </div>
             </div>
@@ -201,15 +212,28 @@ function test_input($data)
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
     <script>
       'use strict';
-      let logo = document.querySelector('.logo-img');
-      let put  = document.querySelector('.image_path');
+      let logo     = document.querySelector('.logo-img');
+      let img      = document.querySelectorAll('._img_');
+      let img_form = document.querySelectorAll('._img_ input')
+      let put      = document.querySelectorAll('.image_path');
+
       logo.addEventListener('change', () => {
         if (document.querySelector('.logo-img input').value) {
-          put.innerHTML = document.querySelector('.logo-img input').value; 
+          put[0].innerHTML = document.querySelector('.logo-img input').value; 
         } else {
-          put.innerHTML = ''; 
+          put[0].innerHTML = ''; 
         }
       });
+
+      for (let i = 0; i < img.length; i++) {
+        img[i].addEventListener('change', () => {
+          if (img_form[i].value) {
+            put[i+1].innerHTML = img_form[i].value; 
+          } else {
+            put[i+1].innerHTML = ''; 
+          }
+        });
+      }
     </script>
   </body>
 </html>
