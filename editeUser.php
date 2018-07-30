@@ -52,12 +52,12 @@ if ( isset($_POST['submit']) ) {
       $avt->path = $folder;
       $avt->name = $avatar;
 
-      $user->sharedAvatarsList[0] = $avt;
-      $avt->sharedUsersList[0]    = $user;
+      $user->ownAvatarList = array();
+      $user->ownAvatarList[0] = $avt;
 
-      R::storeAll( array($user, $avt) );
+      $id = R::store( $user );
 
-      setcookie('user', serialize(R::load('user', $user->id)), time()+3600, '/');
+      setcookie('user', serialize(R::load('user', $id)), time()+3600, '/');
 
       $user = ( isset($_COOKIE['user']) ) ? unserialize($_COOKIE['user']) : null;
     }

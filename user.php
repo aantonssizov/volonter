@@ -2,8 +2,17 @@
 
 require 'connect.php';
 
-$user    = R::load('user', $_GET['user_id']);
-$avt_ids = R::load('avatar_user', $_GET['user_id']);
+$user = isset($_GET['user_id']) ? 
+  ( R::load('user', $_GET['user_id']) ) : 
+  ( isset($_COOKIE['user']) ) ? 
+    unserialize($_COOKIE['user']) :
+    null;
+
+if ( !$user ) {
+  header('Location: index.php');
+}
+
+$avt_id = R::getRow( 'SELECT (id) FROM `avatar` WHERE user_id=:user LIMIT 1', array(':user'=>$user->id) )
 ?>
 <!DOCTYPE html>
 <html> 
@@ -35,10 +44,22 @@ $avt_ids = R::load('avatar_user', $_GET['user_id']);
             <div class="row">
                 <div class="col">
                     <h2><?php echo $user->name . ' ' . $user->surname;?></h2>
+                    <p>Email: <a href="mailto:<?php echo $user->email;?>"><?php echo $user->email;?></a></p>
                 </div>
                 <div class="col">
-                    <img src="<?php echo $user->sharedAvatarList[$avt_ids->avatar_id]->path . $user->sharedAvatarList[$avt_ids->avatar_id]->name;?>" alt="" style="width: 300px;heigth: 400px;">
+                    <img src="<?php echo $user->ownAvatarList[$avt_id['id']]->path . $user->ownAvatarList[$avt_id['id']]->name;?>" alt="" style="width: 300px;heigth: 400px;">
                 </div>
+            </div>
+            <div class="row">
+              <?php
+              $user_projects = R::findAll('projects', 'user_id = :user', array(':user'=>$user->id));  
+                
+              foreach ($user_projects as $project) {
+                $img_ids = R::getCol( 'SELECT  * FROM images WHERE projects_id=:project', array(":project"=>$project->id) );?>
+                <div class="card col-4 p-0 mx-3 my-2">
+                  <img class="card-image-top" src="<?php echo $project->ownImagesList[$img_ids[0]]['path'] . $project->ownImagesList[$img_ids[0]]['name']?>">
+                </div>
+              <?php }?>
             </div>
         </div>
     </div>
