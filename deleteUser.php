@@ -1,24 +1,26 @@
-<?php
+<?php 
+
 require "connect.php";
 
-$errors = array();
+$user = isset($_COOKIE['user']) ? unserialize($_COOKIE['user']) : null;
 
-if( isset($_POST['email']) && isset($_POST['password']) )
-{
-  echo "";
-  $user = R::findOne('user', 'email = ?', array($_POST['email']));
-  if( $user ) {
-    if ( password_verify($_POST['password'], $user->password) ) {
-      setcookie('user', serialize(R::load('user', $user->id)), time()+3600, '/');
-      header("Location: index.php");
-    } else {
-      $errors[] = "Wrong password";
-    }
-  } else {
-    $errors[] = "Email don't uses";
-  }
+if (!$user) {
+    header("Location: index.php");
 }
 
+if ( isset($_POST['ok']) ) {
+    $ok = $_POST['ok'];
+
+    switch ($ok) {
+        case 'yes': 
+            R::trash($user);
+            header("Location: index.php");
+            break;
+        case 'no':
+            header("Location: signOut.php");
+            break;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html> 
@@ -28,35 +30,39 @@ if( isset($_POST['email']) && isset($_POST['password']) )
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/main.css">
-    <title>Sign in -- Volonter.ua</title>
+    <title><?php echo ($user) ? $user->name : 'Please Sign Up'?> -- Volonter.ua</title>
   </head>
-  <body class="d-flex flex-column justify-content-between">
+  <body class="d-flex flex-column justify-content-between"> 
     <nav class="navbar navbar-expand-lg navbar-dark bg-success navbar-sticky"><a class="navbar-brand" href="#">Volonter</a>
       <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
       <div class="navbar-collapse collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
-          <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
+          <li class="navbar-item"><a class="nav-link active" href="projects.php">Projects</a></li>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
-          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
-          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
+          <?php if( isset($_COOKIE['user']) ){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if( isset($_COOKIE['user']) ){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
-    <div class="container w-25 my-5">
-      <form method="POST">
-        <div class="form-group">
-          <h2>Sign in for start </h2>
-          <?php if(isset($_COOKIE['user'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
-          <?php if(!empty($errors)) { ?> <div class="alert alert-danger" role="alert"> <?php echo array_shift($errors);?></div><?php }?>
-          <input class="form-control my-1" type="email" placeholder="Email" name="email" value="<?php if (!empty($errors)) { echo $_POST['email']; }?>" required>
-          <input class="form-control my-1" type="password" placeholder="Password" name="password" required>
-          <button class="btn btn-success btn-lg btn-block" type="submit" name="submit">Sign in  </button>
-          <p class="text-info my-1">If you don't have account: </p><a class="btn btn-success btn-lg btn-block" role="button" href="signUp.php">Sign up</a>
-        </div>
-      </form>
+
+    <div class="container">
+        <form method="POST">
+            <div class="form-group">
+                <h3 class="text-danger">Are you sure you want to delete your account?</h3>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" name="ok" value="yes" class="btn btn-danger">Yes</button>
+                    </div>
+                    <div class="col">
+                        <button type="submit" name="ok" value="no" class="btn btn-success">No</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
+
     <footer class="footer bg-success p-3">
       <div class="container"><span class="text-light">2017 &copy; Anton Sizov, Vitalina Sizova and Rostislav Sizov.</span></div>
     </footer>

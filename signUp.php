@@ -75,7 +75,7 @@ if ( empty($errors) && isset($_POST['submit']) )
       <form method="POST">
         <div class="form-group">
           <h2>Sign up for start </h2>
-          <?php if(isset($_COOKIE['user']) && isset($_POST['submit'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
+          <?php if(isset($_COOKIE['user'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
           <?php if(!empty($errors)) { ?> <div class="alert alert-danger" role="alert"> <?php echo array_shift($errors);?></div><?php }?>
           <input class="form-control my-1" type="text" placeholder="Name" name="name" value="<?php if(!empty($errors)) {echo $name;} ?>" required>
           <input class="form-control my-1" type="text" placeholder="Surname" name="surname"value="<?php if(!empty($errors)) {echo $surname;} ?>" >

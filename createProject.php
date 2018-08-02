@@ -119,10 +119,10 @@ function test_input($data)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <title>Create project -- volonter.ua</title>
   </head>
-  <body class="d-flex flex-column">
+  <body class="d-flex flex-column justify-content-between">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success navbar-sticky"><a class="navbar-brand" href="#">Volonter</a>
       <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
       <div class="navbar-collapse collapse" id="navbarNav">
@@ -137,7 +137,7 @@ function test_input($data)
       </div>
     </nav>
     <?php if ($user) {?>
-    <form class="mt-5 flex-grow" method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
       <div class="form-group">
         <div class="container">
           <h2>Create project</h2>
@@ -204,7 +204,7 @@ function test_input($data)
     <?php } else { ?>
       <div class="alert alert-danger" role="alert">You should be <a href="signUp.php">signed in</a></div>
     <?php }?>
-    <footer class="footer bg-success p-3" style="position:fixed;bottom:0;width:100%;">
+    <footer class="footer bg-success p-3">
       <div class="container"><span class="text-light">2017 &copy; Anton Sizov, Vitalina Sizova and Rostislav Sizov.</span></div>
     </footer>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -22,13 +22,12 @@ if ( isset($_GET['project_id']) ) {
       <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
       <div class="navbar-collapse collapse" id="navbarNav">
         <ul class="navbar-nav">
-          <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
-          <li class="navbar-item"><a class="nav-link active" href="projects.php">Projects</a></li>
-          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
-          <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
-<?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
-<?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
-
+            <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
+            <li class="navbar-item"><a class="nav-link active" href="projects.php">Projects</a></li>
+            <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
+            <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
+            <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+            <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
@@ -37,12 +36,30 @@ if ( isset($_GET['project_id']) ) {
             <div class="col-lg-8">
                 <h1><?php echo $project->title;?></h1>
                 <h4><?php echo $project->description;?></h4>
-                <?php
-                    for( $i = 1; $i <= count($img_ids); $i++ ) {
-                        ?><img src="<?php echo $project->ownImagesList[$img_ids[$i]['id']]['path'] . $project->ownImagesList[$img_ids[$i]['id']]['name'];?>" alt="" style="width: 300px; height: 200px; border-radius: 25px;" class="m-1">
-                    <?php  
-                    }
-                ?>
+                <div id="images" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php
+                            for( $i = 1; $i < count($img_ids); $i++ ) { ?>
+                                <?php if ($i == 1) {?>
+                                    <div class="carousel-item active">
+                                <?php } else { ?>
+                                    <div class="carousel-item">
+                                <?php }?>
+                                    <img class="d-block w-100 h-100" src="<?php echo $project->ownImagesList[$img_ids[$i]['id']]['path'] . $project->ownImagesList[$img_ids[$i]['id']]['name'];?>" alt="" style="width: 300px; height: 200px; border-radius: 25px;" class="m-1">
+                                </div>
+                            <?php  
+                            }
+                        ?>
+                    </div>
+                    <a class="carousel-control-prev" href="#images" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#images" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
                 <p><?php echo $project->text;?></p>
             </div>
             <div class="col-lg-4">

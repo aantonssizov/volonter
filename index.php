@@ -31,8 +31,8 @@ require 'connect.php';
       </div>
     </nav>
     <header class="header container-fluid d-flex flex-column justify-content-end align-items-end">
-      <h2 class="p-2 text-light">We help people with Volonter</h2>
-      <p class="p-2 col-lg-4 text-white text-lg-right text-sm-right">Volonter.ua is web service for people which need help and helpers.</p>
+      <h2 class="p-2 text-light">We make world better with Volonter</h2>
+      <p class="p-2 col-lg-4 text-white text-lg-right text-sm-right">Volonter.ua is web service for people which want to make world better</p>
     </header>
     <div class="container my-5" id="benefits">
       <h2 class="p-5 text-center">Why do you should to use it</h2>
@@ -78,21 +78,21 @@ require 'connect.php';
             <h2 class="p-2">How it works?</h2>
             <div class="row">
               <div class="col">
-                <h3 class="p-1">For people who need help.</h3>
+                <h3 class="p-1">For organizer.</h3>
                 <ol>
                   <li><a class="text-light" href="signUp.php">Sign up</a> or <a class="text-light"
                     href="signIn.php">sign in</a>.</li>
                   <li><a class="text-light" href="createProject.php">Create project</a>.</li>
-                  <li>And wait helpers.</li>
+                  <li>And wait adherents.</li>
                 </ol>
               </div>
               <div class="col">
-                <h3 class="p-1">For helpers.</h3>
+                <h3 class="p-1">For adherents</h3>
                 <ol>
                   <li><a class="text-light" href="signUp.php">Sign up</a> or <a class="text-light"
                     href="signIn.php">sign in</a>.</li>
                   <li><a class="text-light" href="projects.php">Find project</a>.</li>
-                  <li>And help people.</li>
+                  <li>And join to project.</li>
                 </ol>
               </div>
             </div>
@@ -155,20 +155,20 @@ require 'connect.php';
           </div>
         </form>
         <div class="col">
-          <h2>We are wait you that you will help people...</h2>
+          <h2>We are wait you that you will make world better</h2>
         </div>
       </div>
     </div>
     <?php } else {?>
     <div class="container flex-grow m-5">
-      <h2>Ok lets start</h2>
+      <h2>Ok, lets start</h2>
       <div class="row">
         <div class="col-lg p-2">
-          <h3>Helper</h3>
+          <h3>Adherent</h3>
           <a role="button" href="projects.php" class="btn btn-lg btn-block btn-outline-success">Find Projects</a>
         </div>
         <div class="col-lg p-2">
-          <h3>Needy</h3>
+          <h3>Organizer</h3>
           <a role="button" href="createProject.php" class="btn btn-lg btn-block btn-outline-success">Create Project</a>
         </div>
       </div>

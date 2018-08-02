@@ -2,17 +2,27 @@
 
 require 'connect.php';
 
-$user = isset($_GET['user_id']) ? 
-  ( R::load('user', $_GET['user_id']) ) : 
-  ( isset($_COOKIE['user']) ) ? 
-    unserialize($_COOKIE['user']) :
-    null;
+@$get_user_id = (int) $_GET['user_id'];
 
-if ( !$user ) {
-  header('Location: index.php');
+$user;
+
+if ($get_user_id) {
+  $user = R::load('user', $get_user_id);
+} else if ( isset($_COOKIE['user']) ) {
+  $user = unserialize($_COOKIE['user']);
+} else {
+  $user = NULL;
 }
 
-$avt_id = R::getRow( 'SELECT (id) FROM `avatar` WHERE user_id=:user LIMIT 1', array(':user'=>$user->id) )
+function isUser($cookie, $user) {
+  $cuser = unserialize($cookie);
+
+  if ($cuser->id == $user->id) {
+    return true;
+  }
+
+  return false;
+}
 ?>
 <!DOCTYPE html>
 <html> 
@@ -38,32 +48,65 @@ $avt_id = R::getRow( 'SELECT (id) FROM `avatar` WHERE user_id=:user LIMIT 1', ar
         </ul>
       </div>
     </nav>
-
+    <?php if ($user) {
+      $avt_id        = R::getRow( 'SELECT (id) FROM `avatar` WHERE user_id=:user LIMIT 1', array(':user'=>$user->id) );
+      $user_projects = R::findAll('projects', 'user_id = :user', array(':user'=>$user->id));  
+    ?>
     <div class="user flex-grow m-5">
         <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h2><?php echo $user->name . ' ' . $user->surname;?></h2>
-                    <p>Email: <a href="mailto:<?php echo $user->email;?>"><?php echo $user->email;?></a></p>
+          <div class="row">
+              <div class="col">
+                  <h2><?php echo $user->name . ' ' . $user->surname;?></h2>
+                  <p>Email: <a href="mailto:<?php echo $user->email;?>"><?php echo $user->email;?></a></p>
+              </div>
+              <div class="col">
+                  <img src="<?php echo $user->ownAvatarList[$avt_id['id']]->path . $user->ownAvatarList[$avt_id['id']]->name;?>" alt="" style="width: 300px;heigth: 400px;">
+              </div>
+          </div>
+          <p>Count of projects: <?php echo count($user_projects);?></p>
+          <h3>Projects: </h3>
+          <div class="row">
+            <?php              
+            foreach ($user_projects as $project) {
+              $img_ids = R::getCol( 'SELECT  * FROM images WHERE projects_id=:project', array(":project"=>$project->id) );?>
+              <div class="card col-4 p-0 mx-3 my-2">
+                <img class="card-image-top" src="<?php echo $project->ownImagesList[$img_ids[0]]['path'] . $project->ownImagesList[$img_ids[0]]['name']?>">
+                <div class="card-header"><?php echo $project->title;?></div>
+                <div class="card-body">
+                  <h4 class="card-title"><?php echo $project->title;?></h4>
+                  <p><?php echo $project->description;?></p>
+                  <p>Address: <?php echo $project->address;?></p>
+                  <p>Date: <?php echo $project->date;?></p>
+                  <p>Status: <?php echo $project->status;?></p>
+                  <a href="project.php?project_id=<?php echo $project->id;?>" class="card-link">To project</a>
+                  <?php if ( isUser($_COOKIE['user'], $user) ) {?>
+                  <a href="editeProject.php?project_id=<?php echo $project->id;?>" class="card-link">Edite project</a>
+                  <?php }?>
                 </div>
-                <div class="col">
-                    <img src="<?php echo $user->ownAvatarList[$avt_id['id']]->path . $user->ownAvatarList[$avt_id['id']]->name;?>" alt="" style="width: 300px;heigth: 400px;">
-                </div>
-            </div>
-            <div class="row">
-              <?php
-              $user_projects = R::findAll('projects', 'user_id = :user', array(':user'=>$user->id));  
-                
-              foreach ($user_projects as $project) {
-                $img_ids = R::getCol( 'SELECT  * FROM images WHERE projects_id=:project', array(":project"=>$project->id) );?>
-                <div class="card col-4 p-0 mx-3 my-2">
-                  <img class="card-image-top" src="<?php echo $project->ownImagesList[$img_ids[0]]['path'] . $project->ownImagesList[$img_ids[0]]['name']?>">
-                </div>
-              <?php }?>
-            </div>
+              </div>
+            <?php }?>
+          </div>
         </div>
+        <?php if ( isUser($_COOKIE['user'], $user) ) {?>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <h2>Update user</h2>
+              <a href="editeUser.php" role="button" class="btn btn-success btn-block btn-lg">Edite user</a>
+            </div>
+            <div class="col">
+              <h2>Delete user</h2>
+              <a href="deleteUser.php" role="button" class="btn btn-danger btn-block btn-lg">Delete user</a>
+            </div>
+          </div>
+        </div>
+        <?php }?>
     </div>
-
+    <?php } else {?>
+    <div class="container flex-grow">
+      <div class="alert alert-warning" role="alert">User unselect please <a href="signIn.php">sign in</a></div>
+    </div>
+    <?php }?>
     <footer class="footer bg-success p-3">
       <div class="container"><span class="text-light">2017 &copy; Anton Sizov, Vitalina Sizova and Rostislav Sizov.</span></div>
     </footer>
