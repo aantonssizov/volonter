@@ -20,44 +20,11 @@ if( isset($_POST['submit']) )
   $date        = date('Y-m-d');
   $ext         = array(
     '.jpg',
-    '.png'
+    '.jpeg',
+    '.png',
+    '.gif'
   );
-
-  //images
   $folder   = '../volonter_images/';
-  // $upl_f    = '/opt/lampp/htdocs/volonter_images';
-  $logo_img = $_FILES['logo_img']['name'];
-  $img      = array(
-    $_FILES['img1']['name'],
-    $_FILES['img2']['name'],
-    $_FILES['img3']['name']
-  );
-
-  $upload_ext = ( strpos($logo_img, $ext[0]) != false ) ? '.jpg' : ( strpos($logo_img, $ext[1]) != false ) ? '.png' : '.gif';
-
-  // upload project
-  // upload images to server
-  move_uploaded_file($_FILES['logo_img']['tmp_name'], $folder.$_FILES['logo_img']['name']);
-  for( $i = 1; $i < 4; $i++ ) {
-    move_uploaded_file($_FILES["img$i"]['tmp_name'], $folder.$_FILES["img$i"]['name']);
-  }
-
-  $new_name = "img_".date("YmdHis").$upload_ext;
-  //Переименуем файл на всякий случай что бы не было совпадений                                                  
-  rename($folder.$logo_img, $folder.$new_name);
-  $logo_img = $new_name;
-
-  sleep(1);
-  for( $i = 0; $i < 3; $i++ )
-  {
-    $upload_ext = ( strpos($img[$i], $ext[0]) ) ? '.jpg' : ( strpos($img[$i], $ext[1]) );
-
-    $new_name = "img_".date("YmdHis").".jpg";
-    rename($folder.$img[$i], $folder.$new_name);
-    $img[$i] = $new_name;
-
-    sleep(1);
-  }
 
   // upload project
   $project = R::dispense('projects');
@@ -70,34 +37,78 @@ if( isset($_POST['submit']) )
   $project->status      = $status;
   $project->date        = $date; 
   $project->user        = $user;
+
+  //images
+  if ( isset($_FILES['logo']) ) {
+    $logo_img = $_FILES['logo_img']['name'];// Logo
+    
+    move_uploaded_file($_FILES['logo_img']['tmp_name'], $folder.$_FILES['logo_img']['name']);// Upload file
+
+    $upload_ext = '';// Extension of Logo
+    foreach ($ext as $e) {
+      if ( strpos($logo_img, $e) != false) {
+        $upload_ext = $e;
+        
+        $new_name = "img_".date("YmdHis").$upload_ext;
+        //Переименуем файл на всякий случай что бы не было совпадений                                                  
+        rename($folder.$logo_img, $folder.$new_name);
+        $logo_img = $new_name;
+        sleep(1);
+        break;
+      }
+    }
+
+    //upload logo image
+    $logo = R::dispense('images');
+    $logo->name    = $logo_img;
+    $logo->path    = $folder;
+
+    $project->ownImagesList[] = $logo;
+  }
   
-  //upload imagepath
-  //upload logo image
-  $logo = R::dispense('images');
-  $logo->name    = $logo_img;
-  $logo->path    = $folder;
+  if ( isset($_FILES['img']) ) {
+    $img = $_FILES['img'];
+
+    // upload images to server
+    for( $i = 1; $i <= count($img['name']); $i++ ) {
+      move_uploaded_file($_FILES["img"]['tmp_name'][$i], $folder.$_FILES["img"]['name'][$i]);
+    }
   
-  
-  //upload other images
+    
+    for( $i = 1; $i <= count($img['name']); $i++ )
+    {
+      $upload_ext = '';
 
-  $uimgs = array();
+      foreach ($ext as $e) {
+        if ( strpos($img['name'][$i], $e) != false ) {
+          $upload_ext = $e;
 
-  $uimgs[0] = R::dispense('images');
-  $uimgs[0]->name = $img[0];
-  $uimgs[0]->path = $folder;
+          $new_name = "img_".date("YmdHis").$upload_ext;
+          rename($folder.$img['name'][$i], $folder.$new_name);
+          $img['name'][$i] = $new_name;
+            
+          sleep(1);
+          break;
+        }
+      }
+    }
 
-  $uimgs[1] = R::dispense('images');
-  $uimgs[1]->name = $img[1];
-  $uimgs[1]->path = $folder;
- 
-  $uimgs[2] = R::dispense('images');
-  $uimgs[2]->name = $img[2];
-  $uimgs[2]->path = $folder;
+    //upload other images
 
-  $project->ownImagesList[] = $logo;
-  for( $i = 0; $i < count($uimgs); $i++ )
-  {
-    $project->ownImagesList[] = $uimgs[$i];
+    $uimgs = array();
+
+    for ($i = 0; $i < count($img['name']); $i++) {
+      $n = $i+1;
+
+      $uimgs[$i] = R::dispense('images');
+      $uimgs[$i]->name = $img['name'][$n];
+      $uimgs[$i]->path = $folder;
+    }
+
+    for( $i = 0; $i < count($uimgs); $i++ )
+    {
+      $project->ownImagesList[] = $uimgs[$i];
+    }
   }
 
   R::store( $project );
@@ -131,7 +142,8 @@ function test_input($data)
           <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
-          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link active" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="user.php">User</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
@@ -181,15 +193,15 @@ function test_input($data)
             <div class="col-lg-8 col-12">
               <div class="row">
                 <label class="btn btn-outline-secondary m-1 col _img_">Add image
-                  <input type="file" style="display: none;" name="img1">
+                  <input type="file" style="display: none;" name="img[1]">
                   <span class="image_path"></span>
                 </label>
                 <label class="btn btn-outline-secondary m-1 col _img_">Add image
-                  <input type="file" style="display: none;" name="img2">
+                  <input type="file" style="display: none;" name="img[2]">
                   <span class="image_path"></span>
                 </label>
                 <label class="btn btn-outline-secondary m-1 col _img_">Add image
-                  <input type="file" style="display: none;" name="img3">
+                  <input type="file" style="display: none;" name="img[3]">
                   <span class="image_path"></span>
                 </label>
               </div>

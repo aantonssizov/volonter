@@ -27,25 +27,26 @@ if ( isset($_GET['project_id']) ) {
             <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
             <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
             <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+            <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="user.php">User</a></li><?php }?>
             <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
     </nav>
-    <div class="container project m-5 p-5 flex-grow">
+    <div class="container project m-5 flex-grow">
         <div class="row">
             <div class="col-lg-8">
                 <h1><?php echo $project->title;?></h1>
                 <h4><?php echo $project->description;?></h4>
-                <div id="images" class="carousel slide" data-ride="carousel">
+                <div id="images" class="carousel slide m-3" data-ride="carousel">
                     <div class="carousel-inner">
                         <?php
-                            for( $i = 1; $i < count($img_ids); $i++ ) { ?>
-                                <?php if ($i == 1) {?>
+                            for( $i = 0; $i < count($img_ids); $i++ ) { ?>
+                                <?php if ($i == 0) {?>
                                     <div class="carousel-item active">
                                 <?php } else { ?>
                                     <div class="carousel-item">
                                 <?php }?>
-                                    <img class="d-block w-100 h-100" src="<?php echo $project->ownImagesList[$img_ids[$i]['id']]['path'] . $project->ownImagesList[$img_ids[$i]['id']]['name'];?>" alt="" style="width: 300px; height: 200px; border-radius: 25px;" class="m-1">
+                                    <img class="d-block w-100 img-responsive" src="<?php echo $project->ownImagesList[$img_ids[$i]['id']]['path'] . $project->ownImagesList[$img_ids[$i]['id']]['name'];?>" alt="" class="m-1">
                                 </div>
                             <?php  
                             }
@@ -60,17 +61,22 @@ if ( isset($_GET['project_id']) ) {
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-                <p><?php echo $project->text;?></p>
+                <?php
+                $text = explode("\n", $project->text);
+                
+                foreach ($text as $p) {?>
+                    <p><?php echo $p;?></p>
+                <?php }?>
             </div>
             <div class="col-lg-4">
-                <img src="<?php echo $project->ownImagesList[$img_ids[0]['id']]['path'] . $project->ownImagesList[$img_ids[0]['id']]['name'];?>" alt="" style="width: 300px; height: 200px; border-radius: 25px;">
+                <img src="<?php echo $project->ownImagesList[$img_ids[0]['id']]['path'] . $project->ownImagesList[$img_ids[0]['id']]['name'];?>" alt="" class="w-100 img-responsive">
                 <p class="pt-2"><?php echo 'Type: ' . $project->type;?></p>
                 <p><?php echo 'Theme: ' . $project->theme;?></p>
                 <p><?php echo 'Address: ' . $project->address;?></p>
                 <p><?php echo 'Date: ' . $project->date;?></p>
                 <p class="text-<?php echo ($project->status == "active") ? 'success' : 'danger';?>"><?php echo 'Status: ' . $project->status;?></p>
 
-                <p>People which need help: <?php echo $project->user->name . ' ' . $project->user->surname;?></p>
+                <p>Organizer: <a href="user.php?user_id=<?php echo $project->user->id; ?>"><?php echo $project->user->name . ' ' . $project->user->surname;?></a></p>
                 <p>Email: <a href="mailto:<?php echo $project->user->email;?>"><?php echo $project->user->email;?></a></p>
             </div>
         </div>

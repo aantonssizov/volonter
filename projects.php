@@ -25,6 +25,7 @@ $ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="user.php">User</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
@@ -38,7 +39,7 @@ $ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
             $img_ids  = R::getAll('SELECT (id) FROM images WHERE projects_id = ?', array($projects[$ids[$i]['id']]['id']));
             echo '<div class="col-4">';
             echo '  <div class="card">
-                      <img src=' . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['path'] . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['name'] . ' alt="" class="card-image-top" style="max-height: 200px;">
+                      <img src=' . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['path'] . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['name'] . ' alt="" class="card-image-top" style="height: 200px">
                       <div class="card-header">' . $projects[$ids[$i]['id']]['title'] . '</div>
                       <div class="card-body">
                         <h5 class="card-title">' . $projects[$ids[$i]['id']]['title'] . '</h5>

@@ -40,10 +40,11 @@ function isUser($cookie, $user) {
       <div class="navbar-collapse collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="navbar-item"><a class="nav-link" href="index.php">Home</a></li>
-          <li class="navbar-item"><a class="nav-link active" href="projects.php">Projects</a></li>
+          <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
           <?php if( isset($_COOKIE['user']) ){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link active" href="user.php">User</a></li><?php }?>
           <?php if( isset($_COOKIE['user']) ){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
       </div>
@@ -70,7 +71,7 @@ function isUser($cookie, $user) {
             foreach ($user_projects as $project) {
               $img_ids = R::getCol( 'SELECT  * FROM images WHERE projects_id=:project', array(":project"=>$project->id) );?>
               <div class="card col-4 p-0 mx-3 my-2">
-                <img class="card-image-top" src="<?php echo $project->ownImagesList[$img_ids[0]]['path'] . $project->ownImagesList[$img_ids[0]]['name']?>">
+                <img class="card-image-top" style="height: 200px" src="<?php echo $project->ownImagesList[$img_ids[0]]['path'] . $project->ownImagesList[$img_ids[0]]['name']?>">
                 <div class="card-header"><?php echo $project->title;?></div>
                 <div class="card-body">
                   <h4 class="card-title"><?php echo $project->title;?></h4>
