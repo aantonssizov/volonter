@@ -51,7 +51,7 @@ if( isset($_POST['email']) && isset($_POST['password']) )
           <h2>Sign in for start </h2>
           <?php if(isset($_COOKIE['user'])) { ?> <div class="alert alert-success" role="alert">You're signed</div><?php }?>
           <?php if(!empty($errors)) { ?> <div class="alert alert-danger" role="alert"> <?php echo array_shift($errors);?></div><?php }?>
-          <input class="form-control my-1" type="email" placeholder="Email" name="email" value="<?php if (!empty($errors)) { echo $_POST['email']; }?>" required>
+          <input class="form-control my-1" type="email" placeholder="Email" name="email" value="<?php if ( !empty($errors) ) { echo $_POST['email']; }?>" required>
           <input class="form-control my-1" type="password" placeholder="Password" name="password" required>
           <button class="btn btn-success btn-lg btn-block" type="submit" name="submit">Sign in  </button>
           <p class="text-info my-1">If you don't have account: </p><a class="btn btn-success btn-lg btn-block" role="button" href="signUp.php">Sign up</a>

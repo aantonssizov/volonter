@@ -39,7 +39,7 @@ if( isset($_POST['submit']) )
   $project->user        = $user;
 
   //images
-  if ( isset($_FILES['logo']) ) {
+  if ( isset($_FILES['logo_img']) ) {
     $logo_img = $_FILES['logo_img']['name'];// Logo
     
     move_uploaded_file($_FILES['logo_img']['tmp_name'], $folder.$_FILES['logo_img']['name']);// Upload file
@@ -58,24 +58,46 @@ if( isset($_POST['submit']) )
       }
     }
 
-    //upload logo image
+    //-----------upload logo image-------------------
     $logo = R::dispense('images');
-    $logo->name    = $logo_img;
-    $logo->path    = $folder;
+    $logo->name = $logo_img;
+    $logo->path = $folder;
 
     $project->ownImagesList[] = $logo;
   }
   
   if ( isset($_FILES['img']) ) {
-    $img = $_FILES['img'];
+    $img = array(
+      'name' => array(),
+      'tmp_name' => array()
+    );
+
+    //-------------Exporiting img-------------------
+    // name
+    foreach ($_FILES['img']['name'] as $name) {
+      if ( !empty($name) ) {
+        $img['name'][] = $name;
+      }
+    }
+
+    // tmp_name
+    foreach ($_FILES['img']['tmp_name'] as $tmp) {
+      if ( !empty($tmp) ) {
+        $img['tmp_name'][] = $tmp;
+      }
+    }
+
+    // echo '<pre>';
+    // print_r($img);
+    // echo '</pre>';
 
     // upload images to server
-    for( $i = 1; $i <= count($img['name']); $i++ ) {
-      move_uploaded_file($_FILES["img"]['tmp_name'][$i], $folder.$_FILES["img"]['name'][$i]);
+    for( $i = 0; $i < count($img['name']); $i++ ) {
+      move_uploaded_file($img['tmp_name'][$i], $folder.$img['name'][$i]);
     }
   
     
-    for( $i = 1; $i <= count($img['name']); $i++ )
+    for( $i = 0; $i < count($img['name']); $i++ )
     {
       $upload_ext = '';
 
@@ -98,16 +120,16 @@ if( isset($_POST['submit']) )
     $uimgs = array();
 
     for ($i = 0; $i < count($img['name']); $i++) {
-      $n = $i+1;
+      
 
-      $uimgs[$i] = R::dispense('images');
-      $uimgs[$i]->name = $img['name'][$n];
-      $uimgs[$i]->path = $folder;
+      $uimgs[$i - 1] = R::dispense('images');
+      $uimgs[$i - 1]->name = $img['name'][$i];
+      $uimgs[$i - 1]->path = $folder;
     }
 
-    for( $i = 0; $i < count($uimgs); $i++ )
+    foreach( $uimgs as $u )
     {
-      $project->ownImagesList[] = $uimgs[$i];
+      $project->ownImagesList[] = $u;
     }
   }
 
@@ -193,15 +215,15 @@ function test_input($data)
             <div class="col-lg-8 col-12">
               <div class="row">
                 <label class="btn btn-outline-secondary m-1 col _img_">Add image
+                  <input type="file" style="display: none;" name="img[0]">
+                  <span class="image_path"></span>
+                </label>
+                <label class="btn btn-outline-secondary m-1 col _img_">Add image
                   <input type="file" style="display: none;" name="img[1]">
                   <span class="image_path"></span>
                 </label>
                 <label class="btn btn-outline-secondary m-1 col _img_">Add image
                   <input type="file" style="display: none;" name="img[2]">
-                  <span class="image_path"></span>
-                </label>
-                <label class="btn btn-outline-secondary m-1 col _img_">Add image
-                  <input type="file" style="display: none;" name="img[3]">
                   <span class="image_path"></span>
                 </label>
               </div>

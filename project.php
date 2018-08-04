@@ -46,7 +46,7 @@ if ( isset($_GET['project_id']) ) {
                                 <?php } else { ?>
                                     <div class="carousel-item">
                                 <?php }?>
-                                    <img class="d-block w-100 img-responsive" src="<?php echo $project->ownImagesList[$img_ids[$i]['id']]['path'] . $project->ownImagesList[$img_ids[$i]['id']]['name'];?>" alt="" class="m-1">
+                                    <img class="d-block w-100" style="height: 500px" src="<?php echo $project->ownImagesList[$img_ids[$i]['id']]['path'] . $project->ownImagesList[$img_ids[$i]['id']]['name'];?>" alt="" class="m-1">
                                 </div>
                             <?php  
                             }
