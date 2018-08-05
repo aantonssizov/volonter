@@ -63,7 +63,7 @@ if( isset($_POST['submit']) )
     $logo->name = $logo_img;
     $logo->path = $folder;
 
-    $project->ownImagesList[] = $logo;
+    $project->ownImagesList[0] = $logo;
   }
   
   if ( isset($_FILES['img']) ) {
@@ -122,9 +122,9 @@ if( isset($_POST['submit']) )
     for ($i = 0; $i < count($img['name']); $i++) {
       
 
-      $uimgs[$i - 1] = R::dispense('images');
-      $uimgs[$i - 1]->name = $img['name'][$i];
-      $uimgs[$i - 1]->path = $folder;
+      $uimgs[$i] = R::dispense('images');
+      $uimgs[$i]->name = $img['name'][$i];
+      $uimgs[$i]->path = $folder;
     }
 
     foreach( $uimgs as $u )
@@ -133,8 +133,9 @@ if( isset($_POST['submit']) )
     }
   }
 
-  R::store( $project );
+  $id = R::store( $project );
   $alert = "success";
+  header("Location: project.php?project_id=$id");
 }
 
 function test_input($data)
@@ -164,7 +165,7 @@ function test_input($data)
           <li class="navbar-item"><a class="nav-link" href="projects.php">Projects</a></li>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signUp.php">Sign up</a></li><?php }?>
           <?php if ( !isset($_COOKIE['user']) ) {?><li class="navbar-item"><a class="nav-link" href="signIn.php">Sign in</a></li><?php }?>
-          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link active" href="createProject.php">Create project</a></li><?php }?>
+          <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="createProject.php">Create project</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="user.php">User</a></li><?php }?>
           <?php if(isset($_COOKIE['user'])){?><li class="navbar-item"><a class="nav-link" href="signOut.php">Sign out</a></li><?php }?>
         </ul>
@@ -175,7 +176,6 @@ function test_input($data)
       <div class="form-group">
         <div class="container">
           <h2>Create project</h2>
-          <?php if($alert) { echo '<div class="alert alert-success" role="alert">Your project uploaded successfull</div>'; }?>
           <div class="row">
             <div class="col-lg-4 col-6">
               <input class="form-control m-1" type="text" name="title" required placeholder="Title">
@@ -236,7 +236,7 @@ function test_input($data)
       </div>
     </form>
     <?php } else { ?>
-      <div class="alert alert-danger" role="alert">You should be <a href="signUp.php">signed in</a></div>
+      <div class="alert alert-danger" role="alert">You should be <a href="signIn.php">signed in</a></div>
     <?php }?>
     <footer class="footer bg-success p-3">
       <div class="container"><span class="text-light">2017 &copy; Anton Sizov, Vitalina Sizova and Rostislav Sizov.</span></div>
