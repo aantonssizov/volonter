@@ -117,16 +117,11 @@ if ( isset($_POST['submit']) ) {
       }
     }
 
-    // echo '<pre>';
-    // print_r($img);
-    // echo '</pre>';
-
     // upload images to server
     for( $i = 0; $i < count($img['name']); $i++ ) {
       move_uploaded_file($img['tmp_name'][$i], $folder.$img['name'][$i]);
     }
   
-    
     for( $i = 0; $i < count($img['name']); $i++ )
     {
       $upload_ext = '';
@@ -147,23 +142,19 @@ if ( isset($_POST['submit']) ) {
 
     //upload other images
 
-    $uimgs = array();
+    $uimgs = null;
 
-    for ($i = 0; $i < count($img['name']); $i++) {
-      if ( isset($project->ownImagesList[$img_ids[$i + 1]]) && !empty($img['name'][$i])) {
-        $uimgs[$i] = R::load('images', $img_ids[$i + 1]);
-        
-        $uimgs[$i]->name = $img['name'][$i];
-        $uimgs[$i]->path = $folder;
-        
-        $project->ownImagesList[$img_ids[$i + 1]] = $uimgs[$i];
-      } else if ( !isset($project->ownImagesList[$img_ids[$i + 1]]) && !empty($img['name'][$i]) ) {
-        $uimgs[$i] = R::dispense('images'); 
-
-        $uimgs[$i]->name = $img['name'][$i];
-        $uimgs[$i]->path = $folder;
-
-        $project->ownImagesList[] = $uimgs[$i];
+    foreach ($img['name'] as $key => $value) {
+      if ( isset($project->ownImagesList[$img_ids[$key + 1]]) && !empty($value) ) {
+        $uimgs = R::load('images', $img_ids[$key + 1]);
+        $uimgs->name = $value;
+        $uimgs->path = $folder;
+        $project->ownImagesList[$img_ids[$key + 1]] = $uimgs;
+      } else if ( !isset($project->ownImagesList[$img_ids[$key + 1]]) && !empty($value) ) {
+        $uimgs = R::dispense('images');
+        $uimgs->name = $value;
+        $uimgs->path = $folder;
+        $project->ownImagesList[$img_ids[$key + 1]] = $uimgs;
       }
     }
   }

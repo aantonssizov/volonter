@@ -39,7 +39,7 @@ $ids      = R::getAll('SELECT (id) FROM projects ORDER BY title LIMIT 30');
             $img_ids  = R::getAll('SELECT (id) FROM images WHERE projects_id = ?', array($projects[$ids[$i]['id']]['id']));
             echo '<div class="col-4">';
             echo '  <div class="card">
-                      <img src=' . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['path'] . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['name'] . ' alt="" class="card-image-top" style="height: 200px">
+                      <img src=' . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['path'] . $projects[$ids[$i]['id']]->ownImagesList[$img_ids[0]['id']]['name'] . ' alt="" class="card-image-top img-responsive" style="height: 200px">
                       <div class="card-header">' . $projects[$ids[$i]['id']]['title'] . '</div>
                       <div class="card-body">
                         <h5 class="card-title">' . $projects[$ids[$i]['id']]['title'] . '</h5>
